@@ -27,23 +27,35 @@ def read_root():
 
 
 # 定義取得台灣股價的 API 路由
-@app.get("/taiwan_stock_price")
-def taiwan_stock_price(
-    stock_id: str = "",  # 股票代號（可透過 URL query string 傳入）
-    start_date: str = "",  # 查詢起始日期（格式：YYYY-MM-DD）
-    end_date: str = "",  # 查詢結束日期（格式：YYYY-MM-DD）
-):
-    # 根據參數組成 SQL 查詢語句
-    sql = f"""
-    select * from taiwan_stock_price
-    where StockID = '{stock_id}'
-    and Date>= '{start_date}'
-    and Date<= '{end_date}'
-    """
-    # 建立資料庫連線
-    mysql_conn = get_mysql_conn()
-    # 使用 Pandas 執行 SQL 查詢並取得資料
-    data_df = pd.read_sql(sql, con=mysql_conn)
-    # 將資料轉為 List of Dict 格式，方便 FastAPI 回傳 JSON
-    data_dict = data_df.to_dict("records")
-    return {"data": data_dict}  # 回傳資料結果
+# @app.get("/taiwan_stock_price")
+# def taiwan_stock_price(
+#     stock_id: str = "",  # 股票代號（可透過 URL query string 傳入）
+#     start_date: str = "",  # 查詢起始日期（格式：YYYY-MM-DD）
+#     end_date: str = "",  # 查詢結束日期（格式：YYYY-MM-DD）
+# ):
+#     # 根據參數組成 SQL 查詢語句
+#     sql = f"""
+#     select * from taiwan_stock_price
+#     where StockID = '{stock_id}'
+#     and Date>= '{start_date}'
+#     and Date<= '{end_date}'
+#     """
+#     # 建立資料庫連線
+#     mysql_conn = get_mysql_conn()
+#     # 使用 Pandas 執行 SQL 查詢並取得資料
+#     data_df = pd.read_sql(sql, con=mysql_conn)
+#     # 將資料轉為 List of Dict 格式，方便 FastAPI 回傳 JSON
+#     data_dict = data_df.to_dict("records")
+#     return {"data": data_dict}  # 回傳資料結果
+
+def get_hot_jobs():
+    pass
+
+def get_hot_skills():
+    pass
+
+def get_hot_skills_for_jobs():
+    pass
+
+def get_jobs_by_category():
+    pass
