@@ -12,9 +12,9 @@ services:
     environment:
       - TZ=Asia/Taipei  # 設定時區為台北（UTC+8）
     networks:
-      - jobmarket-network  # 將此服務連接到 jobmarket-network 網路
+      - jobmarket-swarm-network  # 將此服務連接到 jobmarket-swarm-network 網路
 
 networks:
-  jobmarket-network:
+  jobmarket-swarm-network:
     # 加入已經存在的網路
     external: true
