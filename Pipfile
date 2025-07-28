@@ -10,7 +10,6 @@ sqlalchemy = "==1.4.54"
 pymysql = "==1.1.1"
 loguru = "==0.6.0"
 api = {editable = true, path = "."}
-core = {editable = true, path = "../core"}
 uvicorn = "==0.33.0"
 
 [dev-packages]
