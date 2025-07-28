@@ -4,7 +4,7 @@ from fastapi import FastAPI  # 建立 API 用
 from sqlalchemy import create_engine, engine  # 用來建立資料庫連線
 
 # 匯入自定義的資料庫連線設定
-from config import MYSQL_ACCOUNT, MYSQL_HOST, MYSQL_PASSWORD, MYSQL_PORT
+from .config import MYSQL_ACCOUNT, MYSQL_HOST, MYSQL_PASSWORD, MYSQL_PORT
 
 
 # 建立連接到 MySQL 資料庫的函式，回傳一個 SQLAlchemy 的連線物件
