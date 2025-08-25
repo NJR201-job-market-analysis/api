@@ -1,60 +1,26 @@
-# api
+# Job Market Analysis API
 
-# 環境設定
+## 專案描述
 
-#### 安裝 pipenv
+這是一個提供職缺市場分析數據的 API。它會從不同來源的職缺資料，提供查詢功能。
 
-    pip install pipenv==2022.4.8
+## 專案目的
 
-#### set pipenv
+此專案旨在解決求職者在資訊不對等方面的問題。
 
-    pipenv --python ~/.pyenv/versions/3.8.10/bin/python
+*   **求職者:**
+    *   了解市場上最熱門的職缺和技能。
+    *   根據自己的技能尋找合適的職缺。
+    *   了解不同職位的薪資範圍。
 
-#### 安裝 repo 套件
+## 專案架構
 
-    pipenv sync
+這個 API 使用 Python 的 FastAPI 框架開發，它是一個現代、高效能的 Web 框架，非常適合用來建立 RESTful API。
 
-#### 建立環境變數
+*   **API Framework**: `FastAPI`
+*   **Dependency Management**: `pipenv`
+*   **Deployment**: 本專案使用 `Docker` 進行容器化，並提供 `Dockerfile` 的設定，方便在不同環境中進行部署。
 
-    ENV=DEV python genenv.py
-    ENV=DOCKER python genenv.py
-    ENV=PRODUCTION python genenv.py
-
-#### 排版
-
-    black -l 80 src/
-
-# API
-
-#### 啟動 fastapi
-
-    pipenv run uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8888
-
-# Docker
-
-#### build docker image
-
-    docker build -f Dockerfile -t iyauta/jobmarket-api:0.0.1 .
-
-#### push docker image
-
-    docker push iyauta/jobmarket-api:0.0.1
-
-#### 啟動 api
-
-    DOCKER_IMAGE_VERSION=0.0.1 docker compose -f docker-compose.yml up -d
-
+此 API 旨在提供一個獨立的服務，專注於提供職缺數據的查詢和分析功能。它可以與其他微服務（例如：數據收集服務和資料庫服務）協同工作，形成一個完整的職缺市場分析平台。
 
 ---------------------------------------------------------------------------------
-
-TODO:
-
-取得最熱門職缺
-
-取得最熱門職缺，所需要的技能
-
-透過分類、關鍵字或地區等欄位，查詢職缺
-
-取得最熱門技能
-
-取得職缺和薪資的分布，例如前端、後端和雲端工程師的平均薪水

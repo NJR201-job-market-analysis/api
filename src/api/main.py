@@ -1,7 +1,8 @@
 # 匯入相關套件
 import pandas as pd  # 用來處理資料表
-from fastapi import FastAPI  # 建立 API 用
+from fastapi import FastAPI, Query  # 建立 API 用
 from sqlalchemy import create_engine, engine  # 用來建立資料庫連線
+from typing import List, Optional
 
 # 匯入自定義的資料庫連線設定
 from .config import (
@@ -32,40 +33,59 @@ def read_root():
     return {"Hello": "World"}  # 回傳基本測試訊息
 
 
-# 定義取得台灣股價的 API 路由
-# @app.get("/taiwan_stock_price")
-# def taiwan_stock_price(
-#     stock_id: str = "",  # 股票代號（可透過 URL query string 傳入）
-#     start_date: str = "",  # 查詢起始日期（格式：YYYY-MM-DD）
-#     end_date: str = "",  # 查詢結束日期（格式：YYYY-MM-DD）
-# ):
-#     # 根據參數組成 SQL 查詢語句
-#     sql = f"""
-#     select * from taiwan_stock_price
-#     where StockID = '{stock_id}'
-#     and Date>= '{start_date}'
-#     and Date<= '{end_date}'
-#     """
-#     # 建立資料庫連線
-#     mysql_conn = get_mysql_conn()
-#     # 使用 Pandas 執行 SQL 查詢並取得資料
-#     data_df = pd.read_sql(sql, con=mysql_conn)
-#     # 將資料轉為 List of Dict 格式，方便 FastAPI 回傳 JSON
-#     data_dict = data_df.to_dict("records")
-#     return {"data": data_dict}  # 回傳資料結果
+@app.get("/jobs/hot")
+def get_hot_jobs(limit: int = 10):
+    """
+    取得最熱門職缺
+    """
+    sql = f"""
+    SELECT * FROM jobs
+    ORDER BY views DESC
+    LIMIT {limit}
+    """
+    mysql_conn = get_mysql_conn()
+    data_df = pd.read_sql(sql, con=mysql_conn)
+    data_dict = data_df.to_dict("records")
+    return {"data": data_dict}
 
 
-def get_hot_jobs():
-    pass
+@app.get("/jobs")
+def get_jobs(
+    category: Optional[str] = None,
+    keyword: Optional[str] = None,
+    location: Optional[str] = None,
+):
+    """
+    透過分類、關鍵字或地區等欄位，查詢職缺
+    """
+    sql = "SELECT * FROM jobs WHERE 1=1"
+    if category:
+        sql += f" AND category = '{category}'"
+    if keyword:
+        sql += f" AND (title LIKE '%{keyword}%' OR description LIKE '%{keyword}%')"
+    if location:
+        sql += f" AND location = '{location}'"
+
+    mysql_conn = get_mysql_conn()
+    data_df = pd.read_sql(sql, con=mysql_conn)
+    data_dict = data_df.to_dict("records")
+    return {"data": data_dict}
 
 
-def get_hot_skills():
-    pass
-
-
-def get_hot_skills_for_jobs():
-    pass
-
-
-def get_jobs_by_category():
-    pass
+@app.get("/skills/hot")
+def get_hot_skills(limit: int = 10):
+    """
+    取得最熱門技能
+    """
+    sql = f"""
+    SELECT s.name, COUNT(js.skill_id) as skill_count
+    FROM job_skills js
+    JOIN skills s ON js.skill_id = s.id
+    GROUP BY s.name
+    ORDER BY skill_count DESC
+    LIMIT {limit}
+    """
+    mysql_conn = get_mysql_conn()
+    data_df = pd.read_sql(sql, con=mysql_conn)
+    data_dict = data_df.to_dict("records")
+    return {"data": data_dict}
